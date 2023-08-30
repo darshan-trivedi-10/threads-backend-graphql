@@ -1,5 +1,5 @@
 import express from "express";
-import { ApolloServer } from "@apollo/server";
+import createApolloGraphqlServer from "./graphql";
 import { expressMiddleware } from "@apollo/server/express4";
 
 async function init() {
@@ -9,33 +9,11 @@ async function init() {
 
   app.use(express.json());
 
-  const gqlServer = new ApolloServer({
-    typeDefs: `
-        type Query {
-            hello : String
-        }
-        // type Mutation{
-        //   createUser(firstName: String!, email:String!, password:String!)
-        // }
-    `, // Schema
-    resolvers: {
-        Query : {
-            hello : () =>{
-                return "Hello I'm Graphql Not REST :) "
-            }
-        },
-        Mutation : {
-          // createUser : 
-        }
-    }
-  });
-
-  await gqlServer.start();
-
   app.get("/", (req, res) => {
     res.json("Namaste From Server");
   });
 
+  const gqlServer = await createApolloGraphqlServer();
   app.use('/graphql', expressMiddleware(gqlServer));
 
   app.listen(PORT, () => {
