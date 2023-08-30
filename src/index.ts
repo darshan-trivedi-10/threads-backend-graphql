@@ -14,14 +14,20 @@ async function init() {
         type Query {
             hello : String
         }
+        // type Mutation{
+        //   createUser(firstName: String!, email:String!, password:String!)
+        // }
     `, // Schema
     resolvers: {
         Query : {
             hello : () =>{
                 return "Hello I'm Graphql Not REST :) "
             }
+        },
+        Mutation : {
+          // createUser : 
         }
-    },
+    }
   });
 
   await gqlServer.start();
